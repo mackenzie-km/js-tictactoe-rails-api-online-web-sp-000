@@ -8,7 +8,6 @@ before_action :set_game, only: [:show, :update]
   end
 
   def create
-    puts game_params
     @game = Game.create(game_params)
     render json: @game, status: 201
   end
@@ -24,7 +23,7 @@ before_action :set_game, only: [:show, :update]
 
 private
   def game_params
-    params.permit(state: [])
+    params.permit(:id, state: [])
   end
 
     def set_game
