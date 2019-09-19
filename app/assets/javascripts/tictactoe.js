@@ -85,13 +85,13 @@ var player = () => turn % 2 ? "O" : "X";
 // note the stricter ===
   function saveGame() {
     let squares = $('td')
-    let array = []
-    squares.each(function(index, element) {
-      array.push(element.innerHTML)
-    });
-    // $('td').text((index, square) => {
-    // state.push(square);
+    let state = []
+    // squares.each(function(index, element) {
+    //   array.push(element.innerHTML)
     // });
+    $('td').text((index, square) => {
+    state.push(square);
+    });
     if (currentGame) {
       var url = "/games/" + currentGame
       $.ajax({
@@ -99,13 +99,18 @@ var player = () => turn % 2 ? "O" : "X";
           url: url,
           dataType: "json",
           data: {
-            "state": array
+            state: state
             }
         });
     } else {
-       $.post('/games', {"state": array})
+       $.post('/games', {"state": state}, function(data){
+         currentGame = data["data"]["id"]
+       });
       };
     };
+
+    // the issue was that current game was not being saved until
+    // i used a callback function
 
 
   function clearGame() {
